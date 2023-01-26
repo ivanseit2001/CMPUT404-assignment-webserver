@@ -60,13 +60,13 @@ class MyWebServer(socketserver.BaseRequestHandler):
             
             
             
-
+#check method
     def check_get(self, decoded):
         if decoded[0]!='GET':
             self.request.sendall(bytearray("HTTP/1.1 405 Method Not Allowed\r\nAllow: GET\r\n\r\nContent-length:0",'utf-8'))
             return False
         return True
-
+#check the path
     def check_path(self,decoded):
         if '../' in decoded[1]:
             self.request.sendall(bytearray("HTTP/1.1 404 Not Found\r\n\r\nContent-length:0",'utf-8'))
@@ -96,12 +96,13 @@ class MyWebServer(socketserver.BaseRequestHandler):
                 print('no\n')
                 print("http://127.0.0.1:8080" + decoded[1] + '/')
                 self.request.sendall(bytearray("HTTP/1.1 301 Moved Permanently\r\nLocation: " + "http://127.0.0.1:8080" + decoded[1] + '/' + "\r\n\r\n",'utf-8'))
-            
+            #any wrong directory goes to 404
         except:   
             print('what\n')   
             self.request.sendall(bytearray("HTTP/1.1 404 Not Found\r\n\r\n",'utf-8'))
             return
         return
+    #for 301 status code
     def redirection(self,decoded):
         path='www'+decoded[1]+'/index.html'
         try:
